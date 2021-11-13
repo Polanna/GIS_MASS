@@ -1,0 +1,40 @@
+image: atlassian/default-image:2
+
+definitions:
+  steps:
+  - step: &Build-ShortestPath
+      name: Build-ShortestPath
+      script:
+        - docker-compose -f Benchmarks/ShortestPath/docker-compose.yml build
+      services:
+        - docker
+      caches:
+        - docker
+  - step: &Lint-ShortestPath
+      name: Lint-ShortestPath
+      image: hadolint/hadolint:latest-debian
+      script:
+        - hadolint --ignore DL3008 Benchmarks/ShortestPath/Dockerfile
+
+
+pipelines:
+  default:
+    - parallel:
+        - step: *Build-ShortestPath
+        - step: *Lint-ShortestPath
+
+  branches:
+    master:
+      - step: *Build-ShortestPath
+      - step: *Lint-ShortestPath
+      - step:
+          name: Push to DockerHub - ShortestPath
+          deployment: Production
+          script:
+            - echo ${DOCKERHUB_PASSWORD} | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
+            - docker-compose -f Benchmarks/ShortestPath/docker-compose.yml build
+            - docker push "${DOCKERHUB_USERNAME}/shortestpath:master"
+          services:
+            - docker
+          caches:
+            - docker

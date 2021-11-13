@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>edu.uw.bothell.css.dsl.mass</groupId>
+	<artifactId>mass-all-apps</artifactId>
+	<version>1.1.0-SNAPSHOT</version>
+
+	<packaging>pom</packaging>
+	<name>MASS Java Applications and Benchmarks Parent</name>
+
+	<!-- Parent project properties -->
+	<properties>
+
+		<!-- Build properties -->
+		<maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>11</java.version>
+		<endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
+
+		<!-- Dependency versions -->
+		<mass.version>1.3.1-SNAPSHOT</mass.version>
+
+		<!-- Maven plugin versions -->
+		<mvn.compiler.version>3.7.0</mvn.compiler.version>
+		<mvn.findbugs.version>3.0.5</mvn.findbugs.version>
+		<mvn.assembly.version>3.1.0</mvn.assembly.version>
+		<mvn.jar.version>3.1.0</mvn.jar.version>
+		<mvn.javadoc.version>3.0.0</mvn.javadoc.version>
+
+	</properties>
+
+	<modules>
+		<module>Applications</module>
+		<module>Archived</module>
+		<module>Benchmarks</module>
+		<module>BiologicalNetworks</module>
+		<module>ComputationalGeometry</module>
+		<module>DataSciences</module>
+		<module>FormerProjects</module>
+		<module>Graphs</module>
+	</modules>
+
+	<organization>
+		<name>University of Washington, Bothell, Computing and Software Systems</name>
+		<url>http://www.bothell.washington.edu/css</url>
+	</organization>
+
+	<scm>
+		<developerConnection>https://bitbucket.org/mass_application_developers/mass_java_appl.git</developerConnection>
+	</scm>
+
+	<prerequisites>
+		<maven>3.1.0</maven>
+	</prerequisites>
+
+	<repositories>
+		<repository>
+			<id>uwb-css-dsl-release</id>
+			<name>UWB CSS Distributed Systems Lab Maven Repository</name>
+			<url>http://depts.washington.edu/dslab/maven</url>
+		</repository>
+    		<repository>
+       	 	<id>unidata-releases</id>
+        		<name>Unidata Releases</name>
+        		<url>https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases/</url>
+    		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>edu.uw.bothell.css.dsl.mass</groupId>
+			<artifactId>mass-core</artifactId>
+			<version>${mass.version}</version>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+    				<artifactId>maven-jar-plugin</artifactId>
+    				<version>${mvn.jar.version}</version>
+    				<executions>
+      					<execution>
+         					<id>default-jar</id>
+         					<phase>none</phase>
+      					</execution>
+    				</executions>
+				</plugin>      
+				<plugin>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>${mvn.assembly.version}</version>
+					<executions>
+						<execution>
+							<phase>package</phase>
+							<goals>
+								<goal>single</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<appendAssemblyId>false</appendAssemblyId>
+						<descriptorRefs>
+							<descriptorRef>jar-with-dependencies</descriptorRef>
+						</descriptorRefs>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>${mvn.javadoc.version}</version>
+					<configuration>
+						<source>${java.version}</source>
+						<bottom>"Copyright 2010-2021 University of Washington. All rights reserved."</bottom>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${mvn.compiler.version}</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<compilerArguments>
+						<endorseddirs>${endorsed.dir}</endorseddirs>
+					</compilerArguments>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<version>${mvn.findbugs.version}</version>
+				<configuration>
+					<findbugsXmlOutput>true</findbugsXmlOutput>
+					<findbugsXmlWithMessages>true</findbugsXmlWithMessages>
+					<xmlOutput>true</xmlOutput>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
